@@ -1,12 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#101018">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#171720">
 <title>Asad AI</title>
-
-<!-- Telegram Mini Apps -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -14,9 +13,10 @@
   color-scheme: dark;
   --bg: #101018;
   --card: #191923;
+  --field: #111119;
   --border: #30303d;
   --text: #f6f5ff;
-  --muted: #9b9aaf;
+  --muted: #9998ac;
   --accent: #875cff;
 }
 * { box-sizing: border-box; }
@@ -26,85 +26,123 @@ body {
   color: var(--text);
   font-family: Arial, sans-serif;
 }
-button, input, textarea, select { font: inherit; }
+button, textarea, select { font: inherit; }
 button { cursor: pointer; }
-.app { max-width: 620px; margin: auto; padding: 18px 15px 100px; }
-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+.app {
+  max-width: 620px;
+  margin: auto;
+  padding: 20px 15px calc(95px + env(safe-area-inset-bottom));
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
+}
 .logo {
-  width: 52px; height: 52px; border-radius: 16px;
-  object-fit: cover; background: var(--card);
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  object-fit: cover;
 }
 .brand { font-size: 23px; font-weight: 800; }
 .subtitle { color: var(--muted); font-size: 12px; margin-top: 5px; }
-h2 { font-size: 22px; margin: 12px 0 18px; }
-h3 { font-size: 15px; margin: 20px 0 10px; }
+h2 { font-size: 23px; margin: 12px 0 18px; }
+h3 { font-size: 15px; margin: 22px 0 12px; }
 .card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 17px; padding: 15px; margin-bottom: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 19px;
+  padding: 16px;
+  margin-bottom: 15px;
 }
-label, .label { display: block; font-size: 13px; margin-bottom: 9px; }
-select, textarea, input[type="text"] {
-  width: 100%; color: var(--text); background: #111119;
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 13px; outline: none;
+label, .label { display: block; font-size: 14px; margin-bottom: 10px; }
+select, textarea {
+  width: 100%;
+  color: var(--text);
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  outline: none;
 }
-textarea { min-height: 110px; resize: vertical; }
+textarea { min-height: 115px; resize: vertical; }
 select:focus, textarea:focus { border-color: var(--accent); }
 .muted { color: var(--muted); font-size: 12px; line-height: 1.5; }
-.modes, .options { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
 .option {
-  background: #111119; border: 1px solid var(--border);
-  color: var(--muted); border-radius: 12px; padding: 12px 8px;
+  min-height: 54px;
+  padding: 12px 8px;
+  color: var(--muted);
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 13px;
 }
 .option.active {
-  border-color: var(--accent); color: white;
-  background: #28203f;
+  color: white;
+  border-color: var(--accent);
+  background: #29203f;
 }
 .upload {
-  display: block; text-align: center; padding: 20px 12px;
-  background: #111119; border: 1px dashed #62517f;
-  border-radius: 13px; margin-top: 10px;
+  display: block;
+  text-align: center;
+  padding: 20px 12px;
+  background: var(--field);
+  border: 1px dashed #62517f;
+  border-radius: 13px;
+  margin-top: 12px;
 }
 .upload input { display: none; }
-.preview { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .preview img, .preview video {
-  width: 76px; height: 76px; object-fit: cover;
-  border-radius: 10px; background: #08080c;
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #08080c;
+}
+.notice {
+  padding: 14px;
+  border-radius: 14px;
+  background: #242033;
+  color: #d6c8ff;
+  font-size: 12px;
+  line-height: 1.6;
 }
 .primary {
-  width: 100%; border: 0; border-radius: 13px;
-  background: linear-gradient(100deg, #7545ed, #a35aff);
-  color: white; font-weight: bold; padding: 16px; margin-top: 12px;
+  width: 100%;
+  min-height: 60px;
+  margin-top: 14px;
+  border: 0;
+  border-radius: 15px;
+  color: white;
+  background: linear-gradient(100deg,#7545ed,#a35aff);
+  font-weight: bold;
 }
-.primary:disabled { opacity: .5; cursor: wait; }
-.notice {
-  background: #242033; border-radius: 12px; padding: 12px;
-  font-size: 12px; line-height: 1.5; color: #d6c8ff;
-}
+.primary:disabled { opacity: .5; cursor: not-allowed; }
 .page { display: none; }
 .page.active { display: block; }
 nav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  display: flex; justify-content: space-around; padding: 10px 5px;
-  background: #171720; border-top: 1px solid var(--border);
-  z-index: 5;
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
+  background: #171720;
+  border-top: 1px solid var(--border);
 }
-nav button {
-  border: 0; background: none; color: var(--muted);
-  font-size: 12px; padding: 7px;
-}
+nav button { background: none; border: 0; color: var(--muted); padding: 8px 5px; }
 nav button.active { color: #b99cff; }
-.video-item { margin-bottom: 12px; }
-.video-item video { width: 100%; border-radius: 12px; }
-a { color: #bba4ff; }
+.result-video { width: 100%; border-radius: 12px; margin-top: 10px; }
 </style>
 </head>
 <body>
 <div class="app">
-
 <header>
-  <!-- Замени URL на прямую ссылку на свой logo.png -->
-  <img class="logo" id="logo" src="./Без_названия56_20260820162912[1].png" alt="Asad AI">
+  <img class="logo" src="Без_названия56_20260820162912[1].png" alt="Asad AI">
   <div>
     <div class="brand">Asad AI</div>
     <div class="subtitle">AI VIDEO GENERATOR</div>
@@ -115,19 +153,15 @@ a { color: #bba4ff; }
   <h2>Создать видео</h2>
 
   <div class="card">
-    <label>Режим генерации</label>
-    <div class="modes">
-      <button class="option active" data-mode="image" onclick="setMode('image')">
-        🖼️ Фото + текст
-      </button>
-      <button class="option" data-mode="video" onclick="setMode('video')">
-        🎞️ Изменить видео
-      </button>
+    <label>Режим создания</label>
+    <div class="options">
+      <button class="option active" data-mode="image" onclick="setMode('image')">🖼️ Фото + текст</button>
+      <button class="option" data-mode="video" onclick="setMode('video')">🎞️ Изменить видео</button>
     </div>
   </div>
 
   <div class="card">
-    <label for="model">Модель AI</label>
+    <label for="model">Модель</label>
     <select id="model" onchange="modelChanged()">
       <option value="asad5">Asad AI 5.0 Generator</option>
       <option value="seedance25">Seedance 2.5 Fast</option>
@@ -138,29 +172,29 @@ a { color: #bba4ff; }
       <option value="veo31fast">Veo 3.1 Fast</option>
       <option value="veo31">Veo 3.1</option>
     </select>
-    <p id="modelInfo" class="muted">Модель Sora 2 Pro через Tikdek.</p>
   </div>
 
   <div class="card">
     <label for="prompt">Описание видео</label>
-    <textarea id="prompt" placeholder="Опиши, что должно происходить в видео..."></textarea>
+    <textarea id="prompt" maxlength="4000" placeholder="Опиши, что должно происходить в видео..."></textarea>
 
     <div id="imageUpload">
       <label class="upload">
         🖼️ Выбрать изображения
         <div class="muted">Можно выбрать несколько фото</div>
-        <input id="images" type="file" accept="image/*" multiple onchange="previewFiles('images','imagePreview')">
+        <input id="images" type="file" accept="image/*" multiple>
       </label>
-      <div class="preview" id="imagePreview"></div>
+      <div id="imagePreview" class="preview"></div>
     </div>
 
-    <div id="videoUpload" style="display:none">
+    <div id="videoUpload" hidden>
       <label class="upload">
         🎞️ Выбрать исходное видео
         <div class="muted">Видео для преобразования</div>
-        <input id="sourceVideo" type="file" accept="video/*" onchange="previewFiles('sourceVideo','videoPreview')">
+        <input id="sourceVideo" type="file" accept="video/*">
       </label>
-      <div class="preview" id="videoPreview"></div>
+      <div id="videoPreview" class="preview"></div>
+      <div id="sourceDuration" class="muted"></div>
     </div>
   </div>
 
@@ -183,34 +217,29 @@ a { color: #bba4ff; }
         <button class="option" data-duration="30" onclick="chooseDuration(this)">30 сек</button>
       </div>
     </div>
-    <p id="durationInfo" class="muted"></p>
+    <p id="durationInfo" class="muted">Выбрано: 5 секунд.</p>
   </div>
 
   <div class="notice">
-    API-ключи не должны находиться в Mini App. Запросы на генерацию отправляются на твой backend.
+    Создание видео доступно после подключения генератора. Твои API-ключи защищены на сервере.
   </div>
-
-  <button class="primary" id="generateBtn" onclick="generateVideo()">
-    ✨ Создать видео
-  </button>
-  <p id="status" class="muted"></p>
+  <button class="primary" id="generateBtn" onclick="generateVideo()">✨ Создать видео</button>
+  <p id="status" class="muted" role="status"></p>
 </main>
 
 <section id="historyPage" class="page">
   <h2>Мои видео</h2>
-  <p class="muted">История появится после подключения backend и сохранения результатов.</p>
+  <p class="muted">История будет загружаться с сервера после его подключения.</p>
   <div id="history"></div>
 </section>
 
 <section id="profilePage" class="page">
   <h2>Профиль</h2>
   <div class="card">
-    <p>👤 <span id="userName">Гость</span></p>
-    <p class="muted">Asad AI Mini App</p>
-    <p class="muted">История и данные аккаунта появятся после подключения backend.</p>
+    <p>👤 <span id="userName">Пользователь</span></p>
+    <p class="muted">Твой профиль Asad AI</p>
   </div>
 </section>
-
 </div>
 
 <nav>
@@ -224,199 +253,166 @@ const tg = window.Telegram?.WebApp;
 tg?.ready();
 tg?.expand();
 
-const API_BASE = ""; // Например: https://api.example.com
+const API_BASE = ""; // Вставь адрес своего backend после его создания
+
+const MODELS = {
+  asad5:         { name: "Asad AI 5.0 Generator", videoToVideo: true },
+  seedance25:    { name: "Seedance 2.5 Fast", videoToVideo: true },
+  omni11:        { name: "Omni Flash 1.1", videoToVideo: true },
+  sora3:         { name: "Sora 3 Beta", videoToVideo: true },
+  seedance20fast:{ name: "Seedance 2.0 Fast", videoToVideo: false },
+  seedance20:    { name: "Seedance 2.0", videoToVideo: false },
+  veo31fast:     { name: "Veo 3.1 Fast", videoToVideo: false },
+  veo31:         { name: "Veo 3.1", videoToVideo: false }
+};
+
 let mode = "image";
 let ratio = "9:16";
 let duration = 5;
 
-const MODELS = {
-  asad5: {
-    name: "Asad AI 5.0 Generator",
-    provider: "tikdek",
-    modelId: "tikdek-sora-2-pro",
-    videoToVideo: true
-  },
-  seedance25: {
-    name: "Seedance 2.5 Fast",
-    provider: "UNCONFIGURED",
-    modelId: null,
-    videoToVideo: true
-  },
-  omni11: {
-    name: "Omni Flash 1.1",
-    provider: "UNCONFIGURED",
-    modelId: null,
-    videoToVideo: true
-  },
-  sora3: {
-    name: "Sora 3 Beta",
-    provider: "UNCONFIGURED",
-    modelId: null,
-    videoToVideo: true
-  },
-  seedance20fast: {
-    name: "Seedance 2.0 Fast",
-    provider: "fal",
-    modelId: "bytedance/seedance-2.0/fast/text-to-video",
-    videoToVideo: false
-  },
-  seedance20: {
-    name: "Seedance 2.0",
-    provider: "fal",
-    modelId: "bytedance/seedance-2.0/text-to-video",
-    videoToVideo: false
-  },
-  veo31fast: {
-    name: "Veo 3.1 Fast",
-    provider: "google",
-    modelId: "veo-3.1-fast-generate-preview",
-    videoToVideo: false
-  },
-  veo31: {
-    name: "Veo 3.1",
-    provider: "google",
-    modelId: "veo-3.1-generate-preview",
-    videoToVideo: false
-  }
-};
+const $ = id => document.getElementById(id);
 
-function setMode(nextMode) {
-  mode = nextMode;
-  document.querySelectorAll("[data-mode]").forEach(b =>
-    b.classList.toggle("active", b.dataset.mode === mode)
+function setMode(value) {
+  mode = value;
+  document.querySelectorAll("[data-mode]").forEach(button =>
+    button.classList.toggle("active", button.dataset.mode === value)
   );
-
-  document.getElementById("imageUpload").style.display =
-    mode === "image" ? "block" : "none";
-  document.getElementById("videoUpload").style.display =
-    mode === "video" ? "block" : "none";
-  document.getElementById("durationArea").style.display =
-    mode === "image" ? "block" : "none";
-
+  $("imageUpload").hidden = value !== "image";
+  $("videoUpload").hidden = value !== "video";
+  $("durationArea").hidden = value === "video";
   modelChanged();
 }
 
 function chooseRatio(button) {
   ratio = button.dataset.ratio;
-  document.querySelectorAll("#ratios .option").forEach(b =>
-    b.classList.toggle("active", b === button)
+  document.querySelectorAll("#ratios .option").forEach(item =>
+    item.classList.toggle("active", item === button)
   );
 }
 
 function chooseDuration(button) {
   duration = Number(button.dataset.duration);
-  document.querySelectorAll("#durations .option").forEach(b =>
-    b.classList.toggle("active", b === button)
+  document.querySelectorAll("#durations .option").forEach(item =>
+    item.classList.toggle("active", item === button)
   );
+  $("durationInfo").textContent = `Выбрано: ${duration} секунд.`;
 }
 
 function modelChanged() {
-  const model = MODELS[document.getElementById("model").value];
-  const warning = document.getElementById("modelInfo");
+  const model = MODELS[$("model").value];
   const allowed = mode === "image" || model.videoToVideo;
+  $("generateBtn").disabled = !API_BASE || !allowed;
 
-  warning.textContent = model.modelId
-    ? "Провайдер: " + model.provider + " · ID: " + model.modelId
-    : "API этой модели ещё не настроен.";
-
-  document.getElementById("generateBtn").disabled =
-    !API_BASE || !allowed || !model.modelId;
-
-  if (mode === "video" && !model.videoToVideo) {
-    warning.textContent += " Эта модель не включена в режим изменения видео.";
-  }
-
-  document.getElementById("durationInfo").textContent =
-    mode === "video"
-      ? "Длительность будет определяться исходным видео."
-      : "Выбрано: " + duration + " секунд.";
+  $("durationInfo").textContent = mode === "video"
+    ? "Длительность будет определяться исходным видео."
+    : `Выбрано: ${duration} секунд.`;
 }
 
 function previewFiles(inputId, previewId) {
-  const input = document.getElementById(inputId);
-  const preview = document.getElementById(previewId);
+  const input = $(inputId);
+  const preview = $(previewId);
   preview.replaceChildren();
 
-  [...input.files].forEach(file => {
+  for (const file of input.files) {
     const url = URL.createObjectURL(file);
     const element = document.createElement(
       file.type.startsWith("video/") ? "video" : "img"
     );
     element.src = url;
-    if (element.tagName === "VIDEO") element.controls = true;
+    if (element.tagName === "VIDEO") {
+      element.controls = true;
+      element.onloadedmetadata = () => {
+        $("sourceDuration").textContent =
+          "Длительность исходного видео: " +
+          Math.round(element.duration) + " секунд.";
+      };
+    }
     preview.appendChild(element);
-  });
+  }
 }
 
+$("images").addEventListener("change", () =>
+  previewFiles("images", "imagePreview")
+);
+$("sourceVideo").addEventListener("change", () =>
+  previewFiles("sourceVideo", "videoPreview")
+);
+
 async function generateVideo() {
-  const model = MODELS[document.getElementById("model").value];
-  const prompt = document.getElementById("prompt").value.trim();
-  const status = document.getElementById("status");
-  const button = document.getElementById("generateBtn");
+  const modelKey = $("model").value;
+  const model = MODELS[modelKey];
+  const prompt = $("prompt").value.trim();
+  const status = $("status");
+  const button = $("generateBtn");
 
   if (!API_BASE) {
-    status.textContent = "Сначала укажи адрес своего backend в API_BASE.";
-    return;
-  }
-  if (!model.modelId) {
-    status.textContent = "Для этой модели ещё не настроен API.";
+    status.textContent =
+      "Генератор ещё не подключён. Сначала нужно настроить сервер.";
     return;
   }
   if (!prompt) {
-    status.textContent = "Сначала напиши описание видео.";
+    status.textContent = "Напиши описание видео.";
     return;
   }
-  if (mode === "video" && !model.videoToVideo) {
-    status.textContent = "Эта модель не настроена для изменения видео.";
-    return;
-  }
-
-  const images = document.getElementById("images").files;
-  const video = document.getElementById("sourceVideo").files[0];
-
-  if (mode === "image" && images.length === 0) {
+  if (mode === "image" && !$("images").files.length) {
     status.textContent = "Выбери хотя бы одно изображение.";
     return;
   }
-  if (mode === "video" && !video) {
+  if (mode === "video" && !$("sourceVideo").files.length) {
     status.textContent = "Выбери исходное видео.";
     return;
   }
 
   const form = new FormData();
-  form.append("model", document.getElementById("model").value);
+  form.append("model", modelKey);
   form.append("mode", mode);
   form.append("prompt", prompt);
   form.append("ratio", ratio);
   if (mode === "image") form.append("duration", String(duration));
-  [...images].forEach(file => form.append("images", file));
-  if (video) form.append("video", video);
+
+  for (const file of $("images").files) {
+    form.append("images", file);
+  }
+  if ($("sourceVideo").files[0]) {
+    form.append("video", $("sourceVideo").files[0]);
+  }
 
   button.disabled = true;
-  status.textContent = "Отправляю запрос на сервер...";
+  status.textContent = "Отправляю запрос...";
 
   try {
+    const headers = {};
+    if (tg?.initData) headers["X-Telegram-Init-Data"] = tg.initData;
+
     const response = await fetch(API_BASE + "/api/generate", {
       method: "POST",
-      body: form,
-      headers: tg?.initData
-        ? { "X-Telegram-Init-Data": tg.initData }
-        : {}
+      headers,
+      body: form
     });
-
     const result = await response.json();
+
     if (!response.ok) {
       throw new Error(result.error || "Ошибка сервера");
     }
 
     status.textContent = result.status === "completed"
-      ? "Видео готово: " + (result.videoUrl || "")
-      : "Задача принята. ID: " + (result.taskId || "не указан");
+      ? "Видео готово."
+      : "Задача отправлена. Номер: " + (result.taskId || "обрабатывается");
 
+    if (result.videoUrl) {
+      const link = document.createElement("a");
+      link.href = result.videoUrl;
+      link.textContent = "Открыть готовое видео";
+      link.target = "_blank";
+      link.rel = "noopener";
+      status.appendChild(document.createElement("br"));
+      status.appendChild(link);
+    }
   } catch (error) {
     status.textContent = "Не удалось создать видео: " + error.message;
   } finally {
     button.disabled = false;
+    modelChanged();
   }
 }
 
@@ -424,15 +420,14 @@ function showPage(pageId, button) {
   document.querySelectorAll(".page").forEach(page =>
     page.classList.toggle("active", page.id === pageId)
   );
-  document.querySelectorAll("nav button").forEach(b =>
-    b.classList.toggle("active", b === button)
+  document.querySelectorAll("nav button").forEach(item =>
+    item.classList.toggle("active", item === button)
   );
 }
 
 if (tg?.initDataUnsafe?.user) {
-  const user = tg.initDataUnsafe.user;
-  document.getElementById("userName").textContent =
-    user.first_name || "Пользователь";
+  $("userName").textContent =
+    tg.initDataUnsafe.user.first_name || "Пользователь";
 }
 
 modelChanged();
