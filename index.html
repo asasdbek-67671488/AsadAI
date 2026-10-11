@@ -1,434 +1,550 @@
-
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#171720">
-<title>Asad AI</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171720">
+  <title>Asad AI</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<style>
-:root {
-  color-scheme: dark;
-  --bg: #101018;
-  --card: #191923;
-  --field: #111119;
-  --border: #30303d;
-  --text: #f6f5ff;
-  --muted: #9998ac;
-  --accent: #875cff;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-}
-button, textarea, select { font: inherit; }
-button { cursor: pointer; }
-.app {
-  max-width: 620px;
-  margin: auto;
-  padding: 20px 15px calc(95px + env(safe-area-inset-bottom));
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 26px;
-}
-.logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 15px;
-  object-fit: cover;
-}
-.brand { font-size: 23px; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-top: 5px; }
-h2 { font-size: 23px; margin: 12px 0 18px; }
-h3 { font-size: 15px; margin: 22px 0 12px; }
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 19px;
-  padding: 16px;
-  margin-bottom: 15px;
-}
-label, .label { display: block; font-size: 14px; margin-bottom: 10px; }
-select, textarea {
-  width: 100%;
-  color: var(--text);
-  background: var(--field);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px;
-  outline: none;
-}
-textarea { min-height: 115px; resize: vertical; }
-select:focus, textarea:focus { border-color: var(--accent); }
-.muted { color: var(--muted); font-size: 12px; line-height: 1.5; }
-.options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
-.option {
-  min-height: 54px;
-  padding: 12px 8px;
-  color: var(--muted);
-  background: var(--field);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-}
-.option.active {
-  color: white;
-  border-color: var(--accent);
-  background: #29203f;
-}
-.upload {
-  display: block;
-  text-align: center;
-  padding: 20px 12px;
-  background: var(--field);
-  border: 1px dashed #62517f;
-  border-radius: 13px;
-  margin-top: 12px;
-}
-.upload input { display: none; }
-.preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.preview img, .preview video {
-  width: 78px;
-  height: 78px;
-  object-fit: cover;
-  border-radius: 10px;
-  background: #08080c;
-}
-.notice {
-  padding: 14px;
-  border-radius: 14px;
-  background: #242033;
-  color: #d6c8ff;
-  font-size: 12px;
-  line-height: 1.6;
-}
-.primary {
-  width: 100%;
-  min-height: 60px;
-  margin-top: 14px;
-  border: 0;
-  border-radius: 15px;
-  color: white;
-  background: linear-gradient(100deg,#7545ed,#a35aff);
-  font-weight: bold;
-}
-.primary:disabled { opacity: .5; cursor: not-allowed; }
-.page { display: none; }
-.page.active { display: block; }
-nav {
-  position: fixed;
-  z-index: 10;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
-  background: #171720;
-  border-top: 1px solid var(--border);
-}
-nav button { background: none; border: 0; color: var(--muted); padding: 8px 5px; }
-nav button.active { color: #b99cff; }
-.result-video { width: 100%; border-radius: 12px; margin-top: 10px; }
-</style>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101018;
+      --card: #191923;
+      --field: #111119;
+      --border: #30303d;
+      --text: #f6f5ff;
+      --muted: #9998ac;
+      --accent: #875cff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      max-width: 620px;
+      margin: auto;
+      padding: 20px 15px calc(95px + env(safe-area-inset-bottom));
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    h2 {
+      font-size: 23px;
+      margin: 12px 0 18px;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 22px 0 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      padding: 16px;
+      margin-bottom: 15px;
+    }
+
+    label,
+    .label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    select,
+    textarea {
+      width: 100%;
+      color: var(--text);
+      background: var(--field);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 115px;
+      resize: vertical;
+    }
+
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .option {
+      min-height: 54px;
+      padding: 12px 8px;
+      color: var(--muted);
+      background: var(--field);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+    }
+
+    .option.active {
+      color: white;
+      border-color: var(--accent);
+      background: #29203f;
+    }
+
+    .upload {
+      display: block;
+      text-align: center;
+      padding: 20px 12px;
+      background: var(--field);
+      border: 1px dashed #62517f;
+      border-radius: 13px;
+      margin-top: 12px;
+    }
+
+    .upload input {
+      display: none;
+    }
+
+    .preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .preview img,
+    .preview video {
+      width: 78px;
+      height: 78px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #08080c;
+    }
+
+    .notice {
+      padding: 14px;
+      border-radius: 14px;
+      background: #242033;
+      color: #d6c8ff;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 60px;
+      margin-top: 14px;
+      border: 0;
+      border-radius: 15px;
+      color: white;
+      background: linear-gradient(100deg, #7545ed, #a35aff);
+      font-weight: bold;
+    }
+
+    .primary:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    nav {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
+      background: #171720;
+      border-top: 1px solid var(--border);
+    }
+
+    nav button {
+      background: none;
+      border: 0;
+      color: var(--muted);
+      padding: 8px 5px;
+    }
+
+    nav button.active {
+      color: #b99cff;
+    }
+
+    .result-video {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
+
 <body>
-<div class="app">
-<header>
-  <img class="logo" src="Без_названия56_20260820162912[1].png" alt="Asad AI">
-  <div>
-    <div class="brand">Asad AI</div>
-    <div class="subtitle">AI VIDEO GENERATOR</div>
-  </div>
-</header>
-
-<main id="createPage" class="page active">
-  <h2>Создать видео</h2>
-
-  <div class="card">
-    <label>Режим создания</label>
-    <div class="options">
-      <button class="option active" data-mode="image" onclick="setMode('image')">🖼️ Фото + текст</button>
-      <button class="option" data-mode="video" onclick="setMode('video')">🎞️ Изменить видео</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <label for="model">Модель</label>
-    <select id="model" onchange="modelChanged()">
-      <option value="asad5">Asad AI 5.0 Generator</option>
-      <option value="seedance25">Seedance 2.5 Fast</option>
-      <option value="omni11">Omni Flash 1.1</option>
-      <option value="sora3">Sora 3 Beta</option>
-      <option value="seedance20fast">Seedance 2.0 Fast</option>
-      <option value="seedance20">Seedance 2.0</option>
-      <option value="veo31fast">Veo 3.1 Fast</option>
-      <option value="veo31">Veo 3.1</option>
-    </select>
-  </div>
-
-  <div class="card">
-    <label for="prompt">Описание видео</label>
-    <textarea id="prompt" maxlength="4000" placeholder="Опиши, что должно происходить в видео..."></textarea>
-
-    <div id="imageUpload">
-      <label class="upload">
-        🖼️ Выбрать изображения
-        <div class="muted">Можно выбрать несколько фото</div>
-        <input id="images" type="file" accept="image/*" multiple>
-      </label>
-      <div id="imagePreview" class="preview"></div>
-    </div>
-
-    <div id="videoUpload" hidden>
-      <label class="upload">
-        🎞️ Выбрать исходное видео
-        <div class="muted">Видео для преобразования</div>
-        <input id="sourceVideo" type="file" accept="video/*">
-      </label>
-      <div id="videoPreview" class="preview"></div>
-      <div id="sourceDuration" class="muted"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <label>Соотношение сторон</label>
-    <div class="options" id="ratios">
-      <button class="option active" data-ratio="9:16" onclick="chooseRatio(this)">9:16 · Вертикальное</button>
-      <button class="option" data-ratio="16:9" onclick="chooseRatio(this)">16:9 · Широкое</button>
-      <button class="option" data-ratio="4:3" onclick="chooseRatio(this)">4:3 · Классическое</button>
-      <button class="option" data-ratio="1:1" onclick="chooseRatio(this)">1:1 · Квадрат</button>
-    </div>
-
-    <div id="durationArea">
-      <h3>Длительность</h3>
-      <div class="options" id="durations">
-        <button class="option active" data-duration="5" onclick="chooseDuration(this)">5 сек</button>
-        <button class="option" data-duration="10" onclick="chooseDuration(this)">10 сек</button>
-        <button class="option" data-duration="15" onclick="chooseDuration(this)">15 сек</button>
-        <button class="option" data-duration="20" onclick="chooseDuration(this)">20 сек</button>
-        <button class="option" data-duration="30" onclick="chooseDuration(this)">30 сек</button>
+  <div class="app">
+    <header>
+      <img class="logo" src="Без_названия56_20260820162912[1].png" alt="Asad AI">
+      <div>
+        <div class="brand">Asad AI</div>
+        <div class="subtitle">AI VIDEO GENERATOR</div>
       </div>
-    </div>
-    <p id="durationInfo" class="muted">Выбрано: 5 секунд.</p>
+    </header>
+
+    <main id="createPage" class="page active">
+      <h2>Создать видео</h2>
+
+      <div class="card">
+        <label>Режим создания</label>
+        <div class="options">
+          <button class="option active" data-mode="image" onclick="setMode('image')">🖼️ Фото + текст</button>
+          <button class="option" data-mode="video" onclick="setMode('video')">🎞️ Изменить видео</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <label for="model">Модель</label>
+        <select id="model" onchange="modelChanged()">
+          <option value="asad5">Asad AI 5.0 Generator</option>
+          <option value="seedance25">Seedance 2.5 Fast</option>
+          <option value="omni11">Omni Flash 1.1</option>
+          <option value="sora3">Sora 3 Beta</option>
+          <option value="seedance20fast">Seedance 2.0 Fast</option>
+          <option value="seedance20">Seedance 2.0</option>
+          <option value="veo31fast">Veo 3.1 Fast</option>
+          <option value="veo31">Veo 3.1</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <label for="prompt">Описание видео</label>
+        <textarea id="prompt" maxlength="4000" placeholder="Опиши, что должно происходить в видео..."></textarea>
+
+        <div id="imageUpload">
+          <label class="upload">
+            🖼️ Выбрать изображения
+            <div class="muted">Можно выбрать несколько фото</div>
+            <input id="images" type="file" accept="image/*" multiple>
+          </label>
+          <div id="imagePreview" class="preview"></div>
+        </div>
+
+        <div id="videoUpload" hidden>
+          <label class="upload">
+            🎞️ Выбрать исходное видео
+            <div class="muted">Видео для преобразования</div>
+            <input id="sourceVideo" type="file" accept="video/*">
+          </label>
+          <div id="videoPreview" class="preview"></div>
+          <div id="sourceDuration" class="muted"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>Соотношение сторон</label>
+        <div class="options" id="ratios">
+          <button class="option active" data-ratio="9:16" onclick="chooseRatio(this)">9:16 · Вертикальное</button>
+          <button class="option" data-ratio="16:9" onclick="chooseRatio(this)">16:9 · Широкое</button>
+          <button class="option" data-ratio="4:3" onclick="chooseRatio(this)">4:3 · Классическое</button>
+          <button class="option" data-ratio="1:1" onclick="chooseRatio(this)">1:1 · Квадрат</button>
+        </div>
+
+        <div id="durationArea">
+          <h3>Длительность</h3>
+          <div class="options" id="durations">
+            <button class="option active" data-duration="5" onclick="chooseDuration(this)">5 сек</button>
+            <button class="option" data-duration="10" onclick="chooseDuration(this)">10 сек</button>
+            <button class="option" data-duration="15" onclick="chooseDuration(this)">15 сек</button>
+            <button class="option" data-duration="20" onclick="chooseDuration(this)">20 сек</button>
+            <button class="option" data-duration="30" onclick="chooseDuration(this)">30 сек</button>
+          </div>
+        </div>
+        <p id="durationInfo" class="muted">Выбрано: 5 секунд.</p>
+      </div>
+
+
+      <button class="primary" id="generateBtn" onclick="generateVideo()">✨ Создать видео</button>
+      <p id="status" class="muted" role="status"></p>
+    </main>
+
+    <section id="historyPage" class="page">
+      <h2>Мои видео</h2>
+      <div id="history"></div>
+    </section>
+
+    <section id="profilePage" class="page">
+      <h2>Профиль</h2>
+      <div class="card">
+        <p>👤 <span id="userName">Пользователь</span></p>
+        <p class="muted">Твой профиль Asad AI</p>
+      </div>
+    </section>
   </div>
 
-  
-  <button class="primary" id="generateBtn" onclick="generateVideo()">✨ Создать видео</button>
-  <p id="status" class="muted" role="status"></p>
-</main>
+  <nav>
+    <button class="active" onclick="showPage('createPage',this)">✨ Создать</button>
+    <button onclick="showPage('historyPage',this)">🎬 Мои видео</button>
+    <button onclick="showPage('profilePage',this)">👤 Профиль</button>
+  </nav>
 
-<section id="historyPage" class="page">
-  <h2>Мои видео</h2>
-  <div id="history"></div>
-</section>
+  <script>
+    const tg = window.Telegram?.WebApp;
+    tg?.ready();
+    tg?.expand();
 
-<section id="profilePage" class="page">
-  <h2>Профиль</h2>
-  <div class="card">
-    <p>👤 <span id="userName">Пользователь</span></p>
-    <p class="muted">Твой профиль Asad AI</p>
-  </div>
-</section>
-</div>
+    const API_BASE = "https://asad-ai-backend.onrender.com"; // Вставь адрес своего backend после его создания
 
-<nav>
-  <button class="active" onclick="showPage('createPage',this)">✨ Создать</button>
-  <button onclick="showPage('historyPage',this)">🎬 Мои видео</button>
-  <button onclick="showPage('profilePage',this)">👤 Профиль</button>
-</nav>
+    const MODELS = {
+      asad5: { name: "Asad AI 5.0 Generator", videoToVideo: true },
+      seedance25: { name: "Seedance 2.5 Fast", videoToVideo: true },
+      omni11: { name: "Omni Flash 1.1", videoToVideo: true },
+      sora3: { name: "Sora 3 Beta", videoToVideo: true },
+      seedance20fast: { name: "Seedance 2.0 Fast", videoToVideo: false },
+      seedance20: { name: "Seedance 2.0", videoToVideo: false },
+      veo31fast: { name: "Veo 3.1 Fast", videoToVideo: false },
+      veo31: { name: "Veo 3.1", videoToVideo: false }
+    };
 
-<script>
-const tg = window.Telegram?.WebApp;
-tg?.ready();
-tg?.expand();
+    let mode = "image";
+    let ratio = "9:16";
+    let duration = 5;
 
-const API_BASE = "https://asad-ai-backend.onrender.com/"; // Вставь адрес своего backend после его создания
+    const $ = id => document.getElementById(id);
 
-const MODELS = {
-  asad5:         { name: "Asad AI 5.0 Generator", videoToVideo: true },
-  seedance25:    { name: "Seedance 2.5 Fast", videoToVideo: true },
-  omni11:        { name: "Omni Flash 1.1", videoToVideo: true },
-  sora3:         { name: "Sora 3 Beta", videoToVideo: true },
-  seedance20fast:{ name: "Seedance 2.0 Fast", videoToVideo: false },
-  seedance20:    { name: "Seedance 2.0", videoToVideo: false },
-  veo31fast:     { name: "Veo 3.1 Fast", videoToVideo: false },
-  veo31:         { name: "Veo 3.1", videoToVideo: false }
-};
+    function setMode(value) {
+      mode = value;
+      document.querySelectorAll("[data-mode]").forEach(button =>
+        button.classList.toggle("active", button.dataset.mode === value)
+      );
+      $("imageUpload").hidden = value !== "image";
+      $("videoUpload").hidden = value !== "video";
+      $("durationArea").hidden = value === "video";
+      modelChanged();
+    }
 
-let mode = "image";
-let ratio = "9:16";
-let duration = 5;
+    function chooseRatio(button) {
+      ratio = button.dataset.ratio;
+      document.querySelectorAll("#ratios .option").forEach(item =>
+        item.classList.toggle("active", item === button)
+      );
+    }
 
-const $ = id => document.getElementById(id);
+    function chooseDuration(button) {
+      duration = Number(button.dataset.duration);
+      document.querySelectorAll("#durations .option").forEach(item =>
+        item.classList.toggle("active", item === button)
+      );
+      $("durationInfo").textContent = `Выбрано: ${duration} секунд.`;
+    }
 
-function setMode(value) {
-  mode = value;
-  document.querySelectorAll("[data-mode]").forEach(button =>
-    button.classList.toggle("active", button.dataset.mode === value)
-  );
-  $("imageUpload").hidden = value !== "image";
-  $("videoUpload").hidden = value !== "video";
-  $("durationArea").hidden = value === "video";
-  modelChanged();
-}
+    function modelChanged() {
+      const model = MODELS[$("model").value];
+      const allowed = mode === "image" || model.videoToVideo;
+      $("generateBtn").disabled = !API_BASE || !allowed;
 
-function chooseRatio(button) {
-  ratio = button.dataset.ratio;
-  document.querySelectorAll("#ratios .option").forEach(item =>
-    item.classList.toggle("active", item === button)
-  );
-}
+      $("durationInfo").textContent = mode === "video"
+        ? "Длительность будет определяться исходным видео."
+        : `Выбрано: ${duration} секунд.`;
+    }
 
-function chooseDuration(button) {
-  duration = Number(button.dataset.duration);
-  document.querySelectorAll("#durations .option").forEach(item =>
-    item.classList.toggle("active", item === button)
-  );
-  $("durationInfo").textContent = `Выбрано: ${duration} секунд.`;
-}
+    function previewFiles(inputId, previewId) {
+      const input = $(inputId);
+      const preview = $(previewId);
+      preview.replaceChildren();
 
-function modelChanged() {
-  const model = MODELS[$("model").value];
-  const allowed = mode === "image" || model.videoToVideo;
-  $("generateBtn").disabled = !API_BASE || !allowed;
+      for (const file of input.files) {
+        const url = URL.createObjectURL(file);
+        const element = document.createElement(
+          file.type.startsWith("video/") ? "video" : "img"
+        );
+        element.src = url;
+        if (element.tagName === "VIDEO") {
+          element.controls = true;
+          element.onloadedmetadata = () => {
+            $("sourceDuration").textContent =
+              "Длительность исходного видео: " +
+              Math.round(element.duration) + " секунд.";
+          };
+        }
+        preview.appendChild(element);
+      }
+    }
 
-  $("durationInfo").textContent = mode === "video"
-    ? "Длительность будет определяться исходным видео."
-    : `Выбрано: ${duration} секунд.`;
-}
-
-function previewFiles(inputId, previewId) {
-  const input = $(inputId);
-  const preview = $(previewId);
-  preview.replaceChildren();
-
-  for (const file of input.files) {
-    const url = URL.createObjectURL(file);
-    const element = document.createElement(
-      file.type.startsWith("video/") ? "video" : "img"
+    $("images").addEventListener("change", () =>
+      previewFiles("images", "imagePreview")
     );
-    element.src = url;
-    if (element.tagName === "VIDEO") {
-      element.controls = true;
-      element.onloadedmetadata = () => {
-        $("sourceDuration").textContent =
-          "Длительность исходного видео: " +
-          Math.round(element.duration) + " секунд.";
-      };
+    $("sourceVideo").addEventListener("change", () =>
+      previewFiles("sourceVideo", "videoPreview")
+    );
+
+    async function generateVideo() {
+      const modelKey = $("model").value;
+      const model = MODELS[modelKey];
+      const prompt = $("prompt").value.trim();
+      const status = $("status");
+      const button = $("generateBtn");
+
+      if (!API_BASE) {
+        status.textContent =
+          "Генератор ещё не подключён. Сначала нужно настроить сервер.";
+        return;
+      }
+      if (!prompt) {
+        status.textContent = "Напиши описание видео.";
+        return;
+      }
+      if (mode === "image" && !$("images").files.length) {
+        status.textContent = "Выбери хотя бы одно изображение.";
+        return;
+      }
+      if (mode === "video" && !$("sourceVideo").files.length) {
+        status.textContent = "Выбери исходное видео.";
+        return;
+      }
+
+      const form = new FormData();
+      form.append("model", modelKey);
+      form.append("mode", mode);
+      form.append("prompt", prompt);
+      form.append("ratio", ratio);
+      if (mode === "image") form.append("duration", String(duration));
+
+      for (const file of $("images").files) {
+        form.append("images", file);
+      }
+      if ($("sourceVideo").files[0]) {
+        form.append("video", $("sourceVideo").files[0]);
+      }
+
+      button.disabled = false;
+      status.textContent = "Отправляю запрос...";
+
+      try {
+        const headers = {};
+        if (tg?.initData) headers["X-Telegram-Init-Data"] = tg.initData;
+
+        const response = await fetch(API_BASE + "/api/generate", {
+          method: "POST",
+          headers,
+          body: form
+        });
+        const contentType = response.headers.get("content-type") || "";
+        let result;
+
+        if (contentType.includes("application/json")) {
+          result = await response.json();
+        } else {
+          const text = await response.text();
+          throw new Error(
+            "Сервер вернул HTML вместо JSON. HTTP " +
+            response.status + ". Проверь backend на Render."
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(result.error || "Ошибка сервера");
+        }
+
+        if (!response.ok) {
+          throw new Error(result.error || "Ошибка сервера");
+        }
+
+        status.textContent = result.status === "completed"
+          ? "Видео готово."
+          : "Задача отправлена. Номер: " + (result.taskId || "обрабатывается");
+
+        if (result.videoUrl) {
+          const link = document.createElement("a");
+          link.href = result.videoUrl;
+          link.textContent = "Открыть готовое видео";
+          link.target = "_blank";
+          link.rel = "noopener";
+          status.appendChild(document.createElement("br"));
+          status.appendChild(link);
+        }
+      } catch (error) {
+        status.textContent = "Не удалось создать видео: " + error.message;
+      } finally {
+        button.disabled = false;
+        modelChanged();
+      }
     }
-    preview.appendChild(element);
-  }
-}
 
-$("images").addEventListener("change", () =>
-  previewFiles("images", "imagePreview")
-);
-$("sourceVideo").addEventListener("change", () =>
-  previewFiles("sourceVideo", "videoPreview")
-);
-
-async function generateVideo() {
-  const modelKey = $("model").value;
-  const model = MODELS[modelKey];
-  const prompt = $("prompt").value.trim();
-  const status = $("status");
-  const button = $("generateBtn");
-
-  if (!API_BASE) {
-    status.textContent =
-      "Генератор ещё не подключён. Сначала нужно настроить сервер.";
-    return;
-  }
-  if (!prompt) {
-    status.textContent = "Напиши описание видео.";
-    return;
-  }
-  if (mode === "image" && !$("images").files.length) {
-    status.textContent = "Выбери хотя бы одно изображение.";
-    return;
-  }
-  if (mode === "video" && !$("sourceVideo").files.length) {
-    status.textContent = "Выбери исходное видео.";
-    return;
-  }
-
-  const form = new FormData();
-  form.append("model", modelKey);
-  form.append("mode", mode);
-  form.append("prompt", prompt);
-  form.append("ratio", ratio);
-  if (mode === "image") form.append("duration", String(duration));
-
-  for (const file of $("images").files) {
-    form.append("images", file);
-  }
-  if ($("sourceVideo").files[0]) {
-    form.append("video", $("sourceVideo").files[0]);
-  }
-
-  button.disabled = true;
-  status.textContent = "Отправляю запрос...";
-
-  try {
-    const headers = {};
-    if (tg?.initData) headers["X-Telegram-Init-Data"] = tg.initData;
-
-    const response = await fetch(API_BASE + "/api/generate", {
-      method: "POST",
-      headers,
-      body: form
-    });
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || "Ошибка сервера");
+    function showPage(pageId, button) {
+      document.querySelectorAll(".page").forEach(page =>
+        page.classList.toggle("active", page.id === pageId)
+      );
+      document.querySelectorAll("nav button").forEach(item =>
+        item.classList.toggle("active", item === button)
+      );
     }
 
-    status.textContent = result.status === "completed"
-      ? "Видео готово."
-      : "Задача отправлена. Номер: " + (result.taskId || "обрабатывается");
-
-    if (result.videoUrl) {
-      const link = document.createElement("a");
-      link.href = result.videoUrl;
-      link.textContent = "Открыть готовое видео";
-      link.target = "_blank";
-      link.rel = "noopener";
-      status.appendChild(document.createElement("br"));
-      status.appendChild(link);
+    if (tg?.initDataUnsafe?.user) {
+      $("userName").textContent =
+        tg.initDataUnsafe.user.first_name || "Пользователь";
     }
-  } catch (error) {
-    status.textContent = "Не удалось создать видео: " + error.message;
-  } finally {
-    button.disabled = false;
+
     modelChanged();
-  }
-}
-
-function showPage(pageId, button) {
-  document.querySelectorAll(".page").forEach(page =>
-    page.classList.toggle("active", page.id === pageId)
-  );
-  document.querySelectorAll("nav button").forEach(item =>
-    item.classList.toggle("active", item === button)
-  );
-}
-
-if (tg?.initDataUnsafe?.user) {
-  $("userName").textContent =
-    tg.initDataUnsafe.user.first_name || "Пользователь";
-}
-
-modelChanged();
-</script>
+  </script>
 </body>
-</html>
 
+</html>
