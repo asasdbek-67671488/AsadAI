@@ -220,16 +220,13 @@ nav button.active { color: #b99cff; }
     <p id="durationInfo" class="muted">Выбрано: 5 секунд.</p>
   </div>
 
-  <div class="notice">
-    Создание видео доступно после подключения генератора. Твои API-ключи защищены на сервере.
-  </div>
+  
   <button class="primary" id="generateBtn" onclick="generateVideo()">✨ Создать видео</button>
   <p id="status" class="muted" role="status"></p>
 </main>
 
 <section id="historyPage" class="page">
   <h2>Мои видео</h2>
-  <p class="muted">История будет загружаться с сервера после его подключения.</p>
   <div id="history"></div>
 </section>
 
@@ -253,7 +250,7 @@ const tg = window.Telegram?.WebApp;
 tg?.ready();
 tg?.expand();
 
-const API_BASE = ""; // Вставь адрес своего backend после его создания
+const API_BASE = "https://asad-ai-backend.onrender.com/"; // Вставь адрес своего backend после его создания
 
 const MODELS = {
   asad5:         { name: "Asad AI 5.0 Generator", videoToVideo: true },
